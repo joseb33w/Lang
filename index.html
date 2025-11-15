@@ -316,17 +316,34 @@
                     outputDiv.className = 'output show success';
                     outputDiv.innerHTML = `<pre>${escapeHtml(output.trim() || 'Code executed successfully!')}</pre>`;
                 } else if (lang.name === 'TypeScript') {
+                    // Strip TypeScript type annotations to run as JavaScript
+                    // Match type annotations in function signatures and variable declarations
+                    let jsCode = lang.code
+                        .replace(/\)\s*:\s*\w+\s*\{/g, ') {') // Remove function return types: function(): type {
+                        .replace(/\(\s*([^:)]+)\s*:\s*\w+\s*\)/g, '($1)') // Remove parameter types: (param: type)
+                        .replace(/:\s*void\s*/g, '') // Remove : void
+                        .replace(/:\s*string\s*/g, '') // Remove : string
+                        .replace(/:\s*number\s*/g, '') // Remove : number
+                        .replace(/:\s*boolean\s*/g, '') // Remove : boolean
+                        .replace(/<[^>]+>/g, '') // Remove generic types
+                        .trim();
+                    
                     const originalLog = console.log;
                     let output = '';
                     console.log = (...args) => {
                         output += args.join(' ') + '\n';
                     };
                     
-                    eval(lang.code);
-                    console.log = originalLog;
-                    
-                    outputDiv.className = 'output show success';
-                    outputDiv.innerHTML = `<pre>${escapeHtml(output.trim() || 'Code executed successfully!')}</pre>`;
+                    try {
+                        eval(jsCode);
+                        console.log = originalLog;
+                        
+                        outputDiv.className = 'output show success';
+                        outputDiv.innerHTML = `<pre>${escapeHtml(output.trim() || 'Code executed successfully!')}</pre>`;
+                    } catch (tsError) {
+                        console.log = originalLog;
+                        throw tsError;
+                    }
                 }
             } catch (error) {
                 outputDiv.className = 'output show error';
