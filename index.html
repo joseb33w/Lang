@@ -178,6 +178,54 @@
             color: #667eea;
             font-weight: bold;
         }
+
+        .projects-section {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .projects-toggle {
+            background: #f5f5f5;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            color: #667eea;
+            width: 100%;
+            text-align: left;
+            transition: background 0.2s;
+        }
+
+        .projects-toggle:hover {
+            background: #e8e8e8;
+        }
+
+        .projects-list {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f9f9f9;
+            border-radius: 6px;
+            display: none;
+            font-size: 0.85em;
+            line-height: 1.6;
+        }
+
+        .projects-list.show {
+            display: block;
+        }
+
+        .project-item {
+            padding: 4px 0;
+            color: #555;
+        }
+
+        .project-item::before {
+            content: "• ";
+            color: #667eea;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -201,14 +249,14 @@
 
     <script>
         const languages = [
-            { name: 'JavaScript', code: 'console.log("Hello, World from JavaScript!");', runnable: true, type: 'browser' },
-            { name: 'Python', code: 'def main():\n    print("Hello, World from Python!")\n\nif __name__ == "__main__":\n    main()', runnable: false, type: 'server' },
-            { name: 'Java', code: 'public class HelloWorld {\n    public static void main(String[] args) {\n        System.out.println("Hello, World from Java!");\n    }\n}', runnable: false, type: 'server' },
-            { name: 'C', code: '#include <stdio.h>\n\nint main() {\n    printf("Hello, World from C!\\n");\n    return 0;\n}', runnable: false, type: 'server' },
-            { name: 'C++', code: '#include <iostream>\n\nint main() {\n    std::cout << "Hello, World from C++!" << std::endl;\n    return 0;\n}', runnable: false, type: 'server' },
-            { name: 'C#', code: 'using System;\n\nclass HelloWorld {\n    static void Main() {\n        Console.WriteLine("Hello, World from C#!");\n    }\n}', runnable: false, type: 'server' },
-            { name: 'Go', code: 'package main\n\nimport "fmt"\n\nfunc main() {\n    fmt.Println("Hello, World from Go!");\n}', runnable: false, type: 'server' },
-            { name: 'Rust', code: 'fn main() {\n    println!("Hello, World from Rust!");\n}', runnable: false, type: 'server' },
+            { name: 'JavaScript', code: 'console.log("Hello, World from JavaScript!");', runnable: true, type: 'browser', projects: ['Web Applications', 'Frontend Development', 'Node.js Backends', 'Browser Extensions', 'Real-time Apps', 'SPAs'] },
+            { name: 'Python', code: 'def main():\n    print("Hello, World from Python!")\n\nif __name__ == "__main__":\n    main()', runnable: false, type: 'server', projects: ['Web Backends (Django/Flask)', 'Data Science', 'Machine Learning', 'Automation Scripts', 'Scientific Computing', 'APIs'] },
+            { name: 'Java', code: 'public class HelloWorld {\n    public static void main(String[] args) {\n        System.out.println("Hello, World from Java!");\n    }\n}', runnable: false, type: 'server', projects: ['Enterprise Applications', 'Android Apps', 'Backend Services', 'Microservices', 'Spring Framework', 'Banking Systems'] },
+            { name: 'C', code: '#include <stdio.h>\n\nint main() {\n    printf("Hello, World from C!\\n");\n    return 0;\n}', runnable: false, type: 'server', projects: ['Operating Systems', 'Embedded Systems', 'Device Drivers', 'System Utilities', 'Real-time Systems', 'Microcontrollers'] },
+            { name: 'C++', code: '#include <iostream>\n\nint main() {\n    std::cout << "Hello, World from C++!" << std::endl;\n    return 0;\n}', runnable: false, type: 'server', projects: ['Game Engines', 'High-Performance Apps', 'System Software', 'Graphics Applications', 'Desktop Applications', 'Real-time Systems'] },
+            { name: 'C#', code: 'using System;\n\nclass HelloWorld {\n    static void Main() {\n        Console.WriteLine("Hello, World from C#!");\n    }\n}', runnable: false, type: 'server', projects: ['Windows Apps', 'Unity Games', 'Enterprise Software', '.NET Applications', 'Web APIs', 'Cross-platform Apps'] },
+            { name: 'Go', code: 'package main\n\nimport "fmt"\n\nfunc main() {\n    fmt.Println("Hello, World from Go!");\n}', runnable: false, type: 'server', projects: ['Cloud Services', 'Microservices', 'API Servers', 'CLI Tools', 'Distributed Systems', 'Container Tools'] },
+            { name: 'Rust', code: 'fn main() {\n    println!("Hello, World from Rust!");\n}', runnable: false, type: 'server', projects: ['System Programming', 'WebAssembly', 'Game Engines', 'Blockchain', 'High-Performance Backends', 'Embedded Systems'] },
             { name: 'Ruby', code: 'puts "Hello, World from Ruby!"', runnable: false, type: 'server' },
             { name: 'PHP', code: '<?php\necho "Hello, World from PHP!\\n";\n?>', runnable: false, type: 'server' },
             { name: 'Swift', code: 'print("Hello, World from Swift!")', runnable: false, type: 'server' },
@@ -251,7 +299,7 @@
             { name: 'Tcl', code: 'puts "Hello, World from Tcl!"', runnable: false, type: 'server' },
             { name: 'Forth', code: ': hello ." Hello, World from Forth!" cr ;\nhello', runnable: false, type: 'server' },
             { name: 'Elm', code: 'module Hello exposing (main)\n\nimport Html exposing (text)\n\nmain =\n    text "Hello, World from Elm!"', runnable: false, type: 'server' },
-            { name: 'TypeScript', code: 'function greet(): void {\n    console.log("Hello, World from TypeScript!");\n}\n\ngreet();', runnable: true, type: 'browser' }
+            { name: 'TypeScript', code: 'function greet(): void {\n    console.log("Hello, World from TypeScript!");\n}\n\ngreet();', runnable: true, type: 'browser', projects: ['Large-Scale Web Apps', 'Enterprise Frontend', 'Full-Stack Apps', 'Type-Safe Development', 'Modern Frameworks', 'Node.js Backends'] }
         ];
 
         function renderLanguages(filteredLanguages = languages) {
@@ -267,6 +315,17 @@
                     '<span class="badge browser">Runnable in Browser</span>' : 
                     '<span class="badge server">Server-side</span>';
 
+                const projectsHtml = lang.projects ? `
+                    <div class="projects-section">
+                        <button class="projects-toggle" onclick="toggleProjects(${index}, event)">
+                            📋 Common Projects <span id="toggle-${index}">▼</span>
+                        </button>
+                        <div class="projects-list" id="projects-${index}">
+                            ${lang.projects.map(p => `<div class="project-item">${escapeHtml(p)}</div>`).join('')}
+                        </div>
+                    </div>
+                ` : '';
+
                 card.innerHTML = `
                     <div class="language-name">
                         ${lang.name}
@@ -278,6 +337,7 @@
                          <div class="output" id="output-${index}"></div>` : 
                         `<p style="color: #666; font-size: 0.9em; margin-top: 10px;">💡 This language requires a server-side runtime</p>`
                     }
+                    ${projectsHtml}
                 `;
 
                 grid.appendChild(card);
@@ -351,11 +411,26 @@
             }
         }
 
+        function toggleProjects(index, event) {
+            event.stopPropagation();
+            const projectsDiv = document.getElementById(`projects-${index}`);
+            const toggleSpan = document.getElementById(`toggle-${index}`);
+            
+            if (projectsDiv.classList.contains('show')) {
+                projectsDiv.classList.remove('show');
+                toggleSpan.textContent = '▼';
+            } else {
+                projectsDiv.classList.add('show');
+                toggleSpan.textContent = '▲';
+            }
+        }
+
         document.getElementById('searchInput').addEventListener('input', (e) => {
             const searchTerm = e.target.value.toLowerCase();
             const filtered = languages.filter(lang => 
                 lang.name.toLowerCase().includes(searchTerm) ||
-                lang.code.toLowerCase().includes(searchTerm)
+                lang.code.toLowerCase().includes(searchTerm) ||
+                (lang.projects && lang.projects.some(p => p.toLowerCase().includes(searchTerm)))
             );
             renderLanguages(filtered);
         });
