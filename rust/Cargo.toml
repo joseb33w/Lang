@@ -1,0 +1,9 @@
+[package]
+name = "lang-rust"
+version = "1.0.0"
+edition = "2021"
+
+[[bin]]
+name = "hello"
+path = "hello.rs"
+

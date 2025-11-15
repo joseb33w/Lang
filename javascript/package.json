@@ -1,0 +1,10 @@
+{
+  "name": "lang-javascript",
+  "version": "1.0.0",
+  "description": "Simple JavaScript Hello World",
+  "main": "hello.js",
+  "scripts": {
+    "start": "node hello.js"
+  }
+}
+
